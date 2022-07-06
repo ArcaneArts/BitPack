@@ -18,6 +18,8 @@
 
 package art.arcane.bitpack;
 
+import art.arcane.bitpack.writable.*;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,4 +28,13 @@ public interface NodeWritable<T> {
     T readNodeData(DataInputStream din) throws IOException;
 
     void writeNodeData(DataOutputStream dos, T t) throws IOException;
+
+    NodeWritable<Boolean> BOOLEAN = new NodeWritableBoolean();
+    NodeWritable<Byte> BYTE = new NodeWritableByte();
+    NodeWritable<Integer> INTEGER = new NodeWritableInteger();
+    NodeWritable<Short> SHORT = new NodeWritableShort();
+    NodeWritable<Float> FLOAT = new NodeWritableFloat();
+    NodeWritable<Double> DOUBLE = new NodeWritableDouble();
+    NodeWritable<Long> LONG = new NodeWritableLong();
+    NodeWritable<String> STRING = new NodeWritableString();
 }
