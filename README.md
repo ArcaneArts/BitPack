@@ -1,10 +1,10 @@
 # BitPack
 Palette Data but in bits, not bytes. Essentially it creates a palette for each possible entry using Lists, or Hashes depending on the size of the palette, then writes the palette index in bits based on how many possibilities there are. For example, if you have only 4 possible palette items, We can store each palette index in only 2 bits. This means a single long can store 32 entries each!
 
-[![Latest version of 'BitPack' @ Cloudsmith](https://api-prd.cloudsmith.io/v1/badges/version/arcane/archive/maven/BitPack/latest/a=noarch;xg=art.arcane/?render=true&show_latest=true)](https://cloudsmith.io/~arcane/repos/archive/packages/detail/maven/BitPack/latest/a=noarch;xg=art.arcane/)
+![](https://img.shields.io/github/v/release/ArcaneArts/BitPack?color=%236f24f0&display_name=tag&label=BitPack&sort=semver&style=for-the-badge)
 
 ```groovy
-maven { url "https://dl.cloudsmith.io/public/arcane/archive/maven/" }
+maven { url "https://arcanearts.jfrog.io/artifactory/archives" }
 ```
 
 ```groovy
