@@ -18,7 +18,15 @@
 
 package art.arcane.bitpack;
 
-import art.arcane.bitpack.writable.*;
+import art.arcane.bitpack.writable.NodeWritableBoolean;
+import art.arcane.bitpack.writable.NodeWritableByte;
+import art.arcane.bitpack.writable.NodeWritableDouble;
+import art.arcane.bitpack.writable.NodeWritableFloat;
+import art.arcane.bitpack.writable.NodeWritableInteger;
+import art.arcane.bitpack.writable.NodeWritableLong;
+import art.arcane.bitpack.writable.NodeWritableShort;
+import art.arcane.bitpack.writable.NodeWritableString;
+import art.arcane.bitpack.writable.NodeWritableUByte;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,6 +39,7 @@ public interface NodeWritable<T> {
 
     NodeWritable<Boolean> BOOLEAN = new NodeWritableBoolean();
     NodeWritable<Byte> BYTE = new NodeWritableByte();
+    NodeWritable<Integer> UBYTE = new NodeWritableUByte();
     NodeWritable<Integer> INTEGER = new NodeWritableInteger();
     NodeWritable<Short> SHORT = new NodeWritableShort();
     NodeWritable<Float> FLOAT = new NodeWritableFloat();

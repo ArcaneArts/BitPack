@@ -18,7 +18,12 @@
 
 package art.arcane.bitpack;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,6 +44,10 @@ public class DataContainer<T> {
         this.bits = new AtomicInteger(INITIAL_BITS);
         this.data = new AtomicReference<>(new DataBits(INITIAL_BITS, length));
         this.palette = new AtomicReference<>(newPalette(INITIAL_BITS));
+    }
+
+    public DataContainer(byte[] bytes, NodeWritable<T> writer) throws IOException {
+        this(new DataInputStream(new ByteArrayInputStream(bytes)), writer);
     }
 
     public DataContainer(DataInputStream din, NodeWritable<T> writer) throws IOException {
@@ -64,7 +73,7 @@ public class DataContainer<T> {
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = c.size() - 1; i >= 0; i--) {
+        for(int i = c.size() - 1; i >= 0; i--) {
             sb.setCharAt(i, c.get(i));
         }
 
@@ -84,7 +93,7 @@ public class DataContainer<T> {
             }
         }, s.length());
 
-        for (int i = 0; i < s.length(); i++) {
+        for(int i = 0; i < s.length(); i++) {
             c.set(i, s.charAt(i));
         }
 
@@ -101,7 +110,7 @@ public class DataContainer<T> {
 
     public String toString() {
         return "DataContainer <" + length + " x " + bits + " bits> -> Palette<" + palette.get().getClass().getSimpleName().replaceAll("\\QPalette\\E", "") + ">: " + palette.get().size() +
-                " " + data.get().toString() + " PalBit: " + palette.get().bits();
+            " " + data.get().toString() + " PalBit: " + palette.get().bits();
     }
 
     public byte[] write() throws IOException {
@@ -120,7 +129,7 @@ public class DataContainer<T> {
         palette.get().iterateIO((data, __) -> {
             try {
                 writer.writeNodeData(dos, data);
-            } catch (IOException e) {
+            } catch(IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -136,7 +145,7 @@ public class DataContainer<T> {
     }
 
     private Palette<T> newPalette(int bits) {
-        if (bits <= LINEAR_BITS_LIMIT) {
+        if(bits <= LINEAR_BITS_LIMIT) {
             return new LinearPalette<>(LINEAR_INITIAL_LENGTH);
         }
 
@@ -144,16 +153,16 @@ public class DataContainer<T> {
     }
 
     public void ensurePaletted(T t) {
-        if (palette.get().id(t) == -1) {
+        if(palette.get().id(t) == -1) {
             expandOne();
         }
     }
 
     public void set(int position, T t) {
-        synchronized (this) {
+        synchronized(this) {
             int id = palette.get().id(t);
 
-            if (id == -1) {
+            if(id == -1) {
                 expandOne();
                 id = palette.get().add(t);
             }
@@ -163,16 +172,16 @@ public class DataContainer<T> {
     }
 
     private void expandOne() {
-        if (palette.get().size() + 1 >= BIT[bits.get()]) {
+        if(palette.get().size() + 1 >= BIT[bits.get()]) {
             setBits(bits.get() + 1);
         }
     }
 
     public T get(int position) {
-        synchronized (this) {
+        synchronized(this) {
             int id = data.get().get(position) + 1;
 
-            if (id <= 0) {
+            if(id <= 0) {
                 return null;
             }
 
@@ -181,8 +190,8 @@ public class DataContainer<T> {
     }
 
     public void setBits(int bits) {
-        if (this.bits.get() != bits) {
-            if (this.bits.get() <= LINEAR_BITS_LIMIT != bits <= LINEAR_BITS_LIMIT) {
+        if(this.bits.get() != bits) {
+            if(this.bits.get() <= LINEAR_BITS_LIMIT != bits <= LINEAR_BITS_LIMIT) {
                 palette.set(newPalette(bits).from(palette.get()));
             }
 
@@ -194,7 +203,7 @@ public class DataContainer<T> {
     private static int[] computeBitLimits() {
         int[] m = new int[16];
 
-        for (int i = 0; i < m.length; i++) {
+        for(int i = 0; i < m.length; i++) {
             m[i] = (int) Math.pow(2, i);
         }
 
@@ -202,12 +211,12 @@ public class DataContainer<T> {
     }
 
     protected static int bits(int size) {
-        if (DataContainer.BIT[INITIAL_BITS] >= size) {
+        if(DataContainer.BIT[INITIAL_BITS] >= size) {
             return INITIAL_BITS;
         }
 
-        for (int i = 0; i < DataContainer.BIT.length; i++) {
-            if (DataContainer.BIT[i] >= size) {
+        for(int i = 0; i < DataContainer.BIT.length; i++) {
+            if(DataContainer.BIT[i] >= size) {
                 return i;
             }
         }

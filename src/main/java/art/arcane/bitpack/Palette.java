@@ -44,7 +44,7 @@ public interface Palette<T> {
     }
 
     default Palette<T> from(int size, NodeWritable<T> writable, DataInputStream in) throws IOException {
-        for (int i = 0; i < size; i++) {
+        for(int i = 0; i < size; i++) {
             add(writable.readNodeData(in));
         }
 
